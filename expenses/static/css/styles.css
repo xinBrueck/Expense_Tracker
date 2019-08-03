@@ -1,0 +1,3 @@
+.section-expenses li:nth-child(even) .expense {
+  background-color: #F2F2F2;
+}

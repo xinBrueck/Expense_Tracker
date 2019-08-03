@@ -1,0 +1,133 @@
+{% extends './base.html' %}
+{% block content %}
+<div class="container">
+  <div class="row">
+
+    <div class="col s12 m4">
+      <div class="card">
+        <div class="card-content">
+          <h6 class="card-title">Total Budget</h6>
+            <form action = "." method = "POST">
+              {% csrf_token %}
+              <div class="input-field">
+                <i class="material-icons prefix">mode_edit</i>
+                <input name="totalBudget" type="text">
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col s6 m3 offset-m2">
+      <div class="card">
+        <div class="card-content">
+          <h6 class="card-title">Total Spend</h6>
+          <h2>{{totalExpense}}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col s6 m3">
+      <div class="card">
+        <div class="card-content">
+          <h6 class="card-title">Total Left</h6>
+          <h2>{{totalLeft}}</h2>
+        </div>
+     </div>
+   </div>
+
+ </div>
+</div>
+
+<section class="section-expenses">
+  <div class="container">
+  <ul class="z-depth-1">
+    <li>
+      <div class="card-panel z-depth-0 expense">
+        {% for expense in expenses %}
+        <div class="row">
+
+          <div class="col m3">
+            <span class="title">{{expense.expenseName}}</span>
+          </div>
+
+          <div class="col m2">
+            <span class="title">{{expense.expenseAmt}}</span>
+          </div>
+
+          <div class="col m4">
+            <span class="title">{{expense.expenseCategory}}</span>
+          </div>
+
+          <div class="col m3">
+            <span class="title">{{expense.expenseDate}}</span>
+          </div>
+
+          <a href= 'deleteExpenses/{{expense.id}}' class="btn-floating red right">
+            <i class="material-icons">remove</i>
+          </a>
+
+        </div>
+        {% endfor %}
+
+      </div>
+    </li>
+  </ul>
+
+  <div class="row">
+    <a href="#addExpense" class="btn-floating green right modal-trigger">
+      <i class="material-icons">add</i>
+    </a>
+  </div>
+  </div>
+</section>
+
+<div class="modal" id="addExpense">
+  <div class="modal-content">
+    <form action="/addExpenses/" method= "POST">
+      {% csrf_token %}
+
+      <div class="input-field">
+        <input type="text" name = "expense">
+        <label for="expense">Expense</label>
+      </div>
+
+      <div class="input-field">
+        <input type="number" name = "expenseAmount">
+        <label for="expenseAmount">Expense Amount</label>
+      </div>
+
+      <select name="expenseCategory">
+        <option>Utilities</option>
+        <option>Health Care</option>
+        <option>Grocery/Restaurant</option>
+        <option>Personal Care</option>
+        <option>Entertainment</option>
+        <option>Membership Fees</option>
+        <option>Transportation</option>
+        <option>Education</option>
+        <option>Other</option>
+      </select>
+
+      <div class="input-field">
+        <input type="text" name = "expenseDate" class = "datepicker">
+        <label for="expenseDate">Expense Date</label>
+      </div>
+
+      <div class="input-field">
+        <button class="btn">Submit</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+<script>
+$(document).ready(function(){
+  $('.modal').modal();
+  $('.datepicker').datepicker({'format': 'yyyy-mm-dd'});
+  $('select').formSelect();
+});
+</script>
+{% endblock %}
