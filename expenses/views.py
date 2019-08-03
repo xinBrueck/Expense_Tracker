@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .models import ExpenseItem, ExpenseStat
 from datetime import datetime
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 def expensesView(request):
     expenseItems = ExpenseItem.objects.all()
@@ -50,40 +52,47 @@ def deleteExpenses(request, expense_id):
     return HttpResponseRedirect('/')
 
 
-# def addBudget(request):
-#     budget = float(request.POST.get('totalBudget'))
-#     print(budget)
-#
-#     expenseItems = ExpenseItem.objects.all()
-#
-#     ##filter by this month
-#     today = datetime.today()
-#     currentYear = today.year
-#     currentMonth = today.month
-#
-#     expenseItems = expenseItems.filter(expenseDate__year=currentYear,
-#                                 expenseDate__month=currentMonth)
-#
-#     ##calculate total expense
-#     totalExpense = 0
-#     for expense in expenseItems:
-#         totalExpense += float(expense.expenseAmt)
-#
-#     ##check whether there are expense stats saved
-#     expenseStat = ExpenseStat.objects.all().first()
-#
-#     if not expenseStat:  #doesn't exist
-#         totalLeft = budget - totalExpense
-#         stats = ExpenseStat(totalBudget = budget,
-#                             totalExpense = totalExpense,
-#                             totalLeft = totalLeft)
-#         stats.save()
-#     else:
-#         expenseStat.update(totalBudget = budget)
-#         totalLeft = expenseStat.totalBudget - totalExpense
-#         expenseStat.update(totalExpense = totalExpense)
-#         expenseStat.update(totalLeft = totalLeft)
-#
-#     return render(request, "stats.html", {'expenses': expenseItems,'stats':expenseStat})
-#
-#     # return HttpResponseRedirect('/')
+class expenseData(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, format=None):
+        categories = ["Utilities", "Health Care", "Grocery/Restaurant", "Personal Care",
+        "Entertainment", "Membership Fees", "Transportation", "Education", "Other"]
+
+        colors = ['#F5CB5C', '#D7FDF0', '#F64740', '#A2E3C4', '#F3E9D2',
+          '#52B2CF', '#F96900', '#57BC90', '#015249'];
+
+        ##sum all of the expenses
+        ##filter by this month
+        today = datetime.today()
+        currentYear = today.year
+        currentMonth = today.month
+        expenseItems = ExpenseItem.objects.all()
+        expenseItems = expenseItems.filter(expenseDate__year=currentYear,expenseDate__month=currentMonth)
+
+        ##calculate total expense
+        categoryExpenses = [0]*9
+
+        for expense in expenseItems:
+            for i in range(0, 9):
+                if expense.expenseCategory == categories[i]:
+                    categoryExpenses[i] += float(expense.expenseAmt)
+                    break
+
+        updatedCategory = []
+        updatedColor = []
+        updatedExpense = []
+
+        for i in range(0, len(categoryExpenses)):
+            if categoryExpenses[i] > 0:
+                updatedCategory.append(categories[i])
+                updatedColor.append(colors[i])
+                updatedExpense.append(categoryExpenses[i])
+
+        data = {
+            "labels": updatedCategory,
+            "expenses": updatedExpense,
+            "expenseColors":updatedColor
+        }
+        return Response(data)

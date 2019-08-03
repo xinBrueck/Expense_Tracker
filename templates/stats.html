@@ -82,6 +82,16 @@
   </div>
 </section>
 
+<section class="expenseChart">
+  <div class="container">
+    <div class="row">
+      <div class="col s8">
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
 <div class="modal" id="addExpense">
   <div class="modal-content">
     <form action="/addExpenses/" method= "POST">
@@ -129,5 +139,49 @@ $(document).ready(function(){
   $('.datepicker').datepicker({'format': 'yyyy-mm-dd'});
   $('select').formSelect();
 });
+
+{% block jquery%}
+var endpoint = '/expenseData/'
+var catLabel = []
+var catData = []
+var catColors = []
+$.ajax({
+  method: 'GET',
+  url :  endpoint,
+  success: function(data){
+    catLabel = data.labels
+    catData = data.expenses
+    catColors = data.expenseColors
+    catChart()
+
+  },
+  error: function(error_data){
+    console.log(error_data)
+  }
+
+})
+
+function catChart(){
+  var ctx = document.getElementById('categoryChart');
+  var myChart = new Chart(ctx, {
+      type: 'polarArea',
+      data: {
+          labels: catLabel,
+          datasets: [{
+              label: "Expense Category Totals",
+              data: catData,
+              backgroundColor: catColors
+          }]
+      },
+      options:{
+        legend: {
+          position : 'left'
+        }
+      }
+  });
+}
+
+
+{% endblock %}
 </script>
 {% endblock %}

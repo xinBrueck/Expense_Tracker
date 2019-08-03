@@ -21,5 +21,6 @@ urlpatterns = [
     path('', views.expensesView),
     path('addExpenses/', views.addExpenses),
     path('deleteExpenses/<int:expense_id>/', views.deleteExpenses),
+    path('expenseData/', views.expenseData.as_view())
     # path('addBudget/', views.addBudget),
 ]
