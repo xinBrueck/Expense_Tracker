@@ -5,6 +5,8 @@ from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+MONTH = ['JAN', 'FEB', 'MAR', 'APR', 'MAY','JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+
 def expensesView(request):
     expenseItems = ExpenseItem.objects.all()
 
@@ -12,6 +14,7 @@ def expensesView(request):
     today = datetime.today()
     currentYear = today.year
     currentMonth = today.month
+    currentMonthName = MONTH[int(currentMonth)-1]
 
     expenseItems = expenseItems.filter(expenseDate__year=currentYear,
                                 expenseDate__month=currentMonth).order_by('expenseDate')
@@ -23,10 +26,13 @@ def expensesView(request):
 
     totalLeft = 3000 - totalExpense
 
+    stats = (totalExpense, totalLeft)
+    dates = (currentYear, currentMonthName)
+
     # return render(request, "stats.html", {'expenses': expenseItems,'stats':expenseStat})
     return render(request, "stats.html", {'expenses': expenseItems,
-                                          'totalExpense':totalExpense,
-                                          'totalLeft':totalLeft})
+                                          'stats':stats,
+                                          'dates':dates})
 
 
 

@@ -3,17 +3,11 @@
 <div class="container">
   <div class="row">
 
-    <div class="col s12 m4">
+    <div class="col s6 m2">
       <div class="card">
         <div class="card-content">
-          <h6 class="card-title">Total Budget</h6>
-            <form action = "." method = "POST">
-              {% csrf_token %}
-              <div class="input-field">
-                <i class="material-icons prefix">mode_edit</i>
-                <input name="totalBudget" type="text">
-              </div>
-            </form>
+          <h2>{{dates.1}}</h2>
+          <h6>{{dates.0}}</h6>
         </div>
       </div>
     </div>
@@ -22,7 +16,7 @@
       <div class="card">
         <div class="card-content">
           <h6 class="card-title">Total Spend</h6>
-          <h2>{{totalExpense}}</h2>
+          <h2>{{stats.0}}</h2>
         </div>
       </div>
     </div>
@@ -31,7 +25,7 @@
       <div class="card">
         <div class="card-content">
           <h6 class="card-title">Total Left</h6>
-          <h2>{{totalLeft}}</h2>
+          <h2>{{stats.1}}</h2>
         </div>
      </div>
    </div>
