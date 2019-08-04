@@ -1,15 +1,13 @@
-<p align="center">
-    Expense Tracker v1
-</p>
+
 
 ## Main Implementation
 
 - Expense Stats section to show `Total Expense`, `Total Budget Left` for the current month
-<img src="./img/expenseStats.png"><br/>
+<br/><img src="./img/expenseStats.png"><br/><br/>
 - Expense Display section to `Display` ordered expenses for the current month, `Add` expense using pop-up **Modal**, and `Delete` expenses
-<img src="./img/addExpenses.png"><br/>
+<br/><img src="./img/addExpenses.png"><br/><br/>
 - Expense Chart section to show expense totals for each category using **Polar Area Chart**
-<img src="./expenseCategoryChart.png"><br/>
+<br/><img src="./img/expenseCategoryChart.png"><br/><br/>
 
 ## Next Steps
 
